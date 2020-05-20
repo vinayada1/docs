@@ -24,7 +24,7 @@ Now that the secret store is set up, you can call Dapr to get the secrets for a 
 
 For a full API reference, go [here](https://github.com/dapr/docs/blob/master/reference/api/secrets_api.md).
 
-Here are a few examples in different programming languages:
+Here are a few examples in different programming languages. Note that the code snippets below are fetching the secret from the "default" namespace.
 
 ### Go
 
@@ -35,7 +35,7 @@ import (
 )
 
 func main() {
-  url := "http://localhost:3500/v1.0/secrets/kubernetes/my-secret"
+  url := "http://localhost:3500/v1.0/secrets/kubernetes/my-secret?metadata.namespace=default"
 
   res, err := http.Get(url)
   if err != nil {
@@ -69,7 +69,7 @@ fetch(`${secretsUrl}/kubernetes/my-secret`)
 ```python
 import requests as req
 
-resp = req.get("http://localhost:3500/v1.0/secrets/kubernetes/my-secret")
+resp = req.get("http://localhost:3500/v1.0/secrets/kubernetes/my-secret?metadata.namespace=default")
 print(resp.text)
 ```
 
@@ -81,7 +81,7 @@ use std::{thread};
 
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
-    let res = reqwest::get("http://localhost:3500/v1.0/secrets/kubernetes/my-secret").await?;
+    let res = reqwest::get("http://localhost:3500/v1.0/secrets/kubernetes/my-secret?metadata.namespace=default").await?;
     let body = res.text().await?;
     println!("Secret:{}", body);
 
@@ -95,9 +95,15 @@ async fn main() -> Result<(), reqwest::Error> {
 
 ```csharp
 var client = new HttpClient();
-var response = await client.GetAsync("http://localhost:3500/v1.0/secrets/kubernetes/my-secret");
+var response = await client.GetAsync("http://localhost:3500/v1.0/secrets/kubernetes/my-secret?metadata.namespace=default");
 response.EnsureSuccessStatusCode();
 
 string secret = await response.Content.ReadAsStringAsync();
 Console.WriteLine(secret);
 ```
+
+## Related Links
+- Setting up secret stores: https://github.com/dapr/docs/blob/master/howto/setup-secret-store/README.md
+- Secrets API:https://github.com/dapr/docs/blob/master/howto/get-secrets/README.md
+- Working Sample: https://github.com/dapr/samples/blob/master/9.secretstore/README.md
+
